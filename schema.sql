@@ -9,6 +9,9 @@ CREATE TABLE users (
     email VARCHAR(255) UNIQUE NOT NULL,                -- 사용자 이메일 (고유값)
     name VARCHAR(100) NOT NULL,                        -- 사용자 이름
     role ENUM('USER', 'BUSINESS') DEFAULT 'USER',         -- 사용자 권한: 일반 사용자 또는 관리자
+    password VARCHAR(255) NOT NULL,                    -- 사용자 비밀번호 (해시값)
+    department VARCHAR(100) NOT NULL,                -- 사용자 소속 부서
+    student_number VARCHAR(20) UNIQUE NOT NULL,          -- 학생 번호 (고유값)
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,     -- 생성 일자
     last_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 마지막 수정 일자
 );
@@ -41,4 +44,23 @@ CREATE TABLE `order` (
     last_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (store_id) REFERENCES store(id) ON DELETE CASCADE
+);
+
+-- 장바구니 테이블 (유저별 하나)
+CREATE TABLE cart (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 장바구니 항목 테이블 (메뉴 단위로 저장)
+CREATE TABLE cart_item (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    cart_id BIGINT NOT NULL,
+    menu_id BIGINT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_id) REFERENCES menu(id) ON DELETE CASCADE
 );
