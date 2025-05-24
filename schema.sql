@@ -16,7 +16,7 @@ CREATE TABLE users (
 CREATE TABLE store (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,              -- CV 고유 ID
     store_name VARCHAR(255) NOT NULL,                   -- 업로드한 파일 이름
-    store_location VARCHAR(500) NOT NULL,                -- S3 등 외부 저장소의 파일 URL
+    store_location VARCHAR(500) NOT NULL                -- S3 등 외부 저장소의 파일 URL
 );
 
 CREATE TABLE menu (
@@ -28,17 +28,17 @@ CREATE TABLE menu (
     amount INT,
     description TEXT NOT NULL,                            -- 메뉴 설명
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,     -- 생성 일자
-    last_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 마지막 수정 일자
+    last_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP -- 마지막 수정 일자
 );
 
-CREATE TABLE order (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,                -- 주문 고유 ID
-    user_id BIGINT NOT NULL,                             -- 주문한 사용자 ID
-    store_id BIGINT NOT NULL,                            -- 주문한 상점 ID
-    price INT NOT NULL,                            -- 총 주문 금액
-    status ENUM('PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED') DEFAULT 'PENDING', -- 주문 상태
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,        -- 주문 생성 일자
-    last_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 마지막 수정 일자
+CREATE TABLE `order` (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,                
+    user_id BIGINT NOT NULL,                             
+    store_id BIGINT NOT NULL,                            
+    price INT NOT NULL,                            
+    status ENUM('PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED') DEFAULT 'PENDING', 
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,        
+    last_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (store_id) REFERENCES store(id) ON DELETE CASCADE
 );
