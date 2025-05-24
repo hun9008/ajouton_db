@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  db:
+    container_name: mysql-ajouton
+    build: .
+    restart: always
+    ports:
+      - "3307:3307"
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./schema.sql:/schema.sql
+    command: --default-authentication-plugin=mysql_native_password
+
+volumes:
+  mysql_data:
